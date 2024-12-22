@@ -1,5 +1,5 @@
-name: 'Notify PR Review'
-description: 'Notify PR review requests by sending a slack message'
+name: 'Notify PR Review (user replaceable)'
+description: 'Notify PR review requests by sending a slack message (with custom slack usernames)'
 branding:
   icon: "bell"
   color: "green"
@@ -10,6 +10,9 @@ inputs:
   slackBotToken:
     description: "slack bot token for messaging"
     required: true
+  emailToSlackMap:
+    description: "emailToSlackMap maps email addresses to custom Slack usernames for notifications"
+    required: false
 runs:
   using: 'node16'
   main: 'index.js'

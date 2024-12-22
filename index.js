@@ -11,6 +11,20 @@ const ENCODE_PAIR = {
     ">": "&gt;"
 };
 const encodeText = text => text.replace(/[<>]/g, matched => ENCODE_PAIR[matched]);
+const parseUserReplaceList = list => {
+    return list.split(";").reduce((map, entry) => {
+        const [email, slackName] = entry.split(":");
+        if (email && slackName) {
+            map[email.trim()] = slackName.trim();
+        }
+        return map;
+    }, {});
+};
+const userReplaceList = core.getInput("emailToSlackMap");
+const userMap = userReplaceList ? parseUserReplaceList(userReplaceList) : {};
+const getSlackUserName = email => {
+    return userMap[email] || email.split("@")[0];
+};
 const fetchUser = url => axios({
     method: "get",
     headers: {
@@ -20,7 +34,7 @@ const fetchUser = url => axios({
 }).then(res => res.data);
 const D0 = "D-0";
 const sendSlack = ({repoName, labels, title, url, email}) => {
-    const [name] = email.split("@");
+    const [name] = getSlackUserName(email);
     const d0exists = labels.some(label => label.name === D0);
 
     return axios({

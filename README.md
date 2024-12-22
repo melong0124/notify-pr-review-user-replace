@@ -32,6 +32,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           slackBotToken: ${{ secrets.SLACK_BOT_TOKEN }}
+          emailToSlackMap: 'user_1@example.com:slack_user_1;user_2@example.com:slack_user_2'
 ```
 
 ## Inputs
@@ -45,6 +46,12 @@ jobs:
 **Required** Slack bot을 통해 메시지를 보내기 위한 토큰
 
 e.g. `xoxb-798572638592-435243279588-9aCaWNnzVYelK9NzMMqa1yxz`
+
+### `emailToSlackMap`
+
+**Optional** GitHub 이메일 주소를 특정 Slack 사용자 이름으로 매핑하는 값입니다. 값이 제공되지 않을 경우, 이메일 주소에서 @ 앞 부분이 Slack 사용자 이름으로 사용됩니다.
+
+e.g. `user_1@example.com:slack_user_1;user_2@example.com:slack_user_2`
 
 ## License
 ```
