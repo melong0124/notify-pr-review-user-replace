@@ -12,7 +12,7 @@ const ENCODE_PAIR = {
 };
 const encodeText = text => text.replace(/[<>]/g, matched => ENCODE_PAIR[matched]);
 const parseUserReplaceList = list => {
-    return list.split(";").reduce((map, entry) => {
+    return list.split(",").reduce((map, entry) => {
         const [email, slackName] = entry.split(":");
         if (email && slackName) {
             map[email.trim()] = slackName.trim();
@@ -21,6 +21,7 @@ const parseUserReplaceList = list => {
     }, {});
 };
 const userReplaceList = core.getInput("emailToSlackMap");
+const userIgnoreList = (core.getInput("ignoreUsers") ?? "").split(",").map(user => user.trim().toLowerCase()).filter(Boolean);
 const userMap = userReplaceList ? parseUserReplaceList(userReplaceList) : {};
 const getSlackUserName = email => {
     return userMap[email] || email.split("@")[0];
@@ -124,17 +125,22 @@ const sendSlack = ({repoName, labels, title, url, email}) => {
 
         const {login, url} = requestedReviewer;
 
+        if (userIgnoreList.includes(login.toLowerCase())) {
+            core.notice(`Receiver(${login}) is ignored!`)
+            return;
+        }
+
         core.notice(`Sender: ${sender.login}, Receiver: ${login}, PR: ${prUrl}`);
         core.info(`'${sender.login}' requests a pr review for ${title}(${prUrl})`);
-        core.info(`Fetching information about '${login}'...`);
+        core.info(`Fetching information about '${login}(${email})'...`);
 
         const {email} = await fetchUser(url);
 
-        core.info(`Sending a slack msg to '${login}'...`);
+        core.info(`Sending a slack msg to '${login}(${email})'...`);
 
         if (!email) {
-            core.warning(`Failed: '${login}' has no public email.`);
-            core.notice(`Failed: '${login}' has no public email.`);
+            core.warning(`Failed: '${login}(${email})' has no public email.`);
+            core.notice(`Failed: '${login}(${email})' has no public email.`);
 
             return;
         }

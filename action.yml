@@ -13,6 +13,9 @@ inputs:
   emailToSlackMap:
     description: "emailToSlackMap maps email addresses to custom Slack usernames for notifications"
     required: false
+  ignoreUsers:
+    description: "ignoreUsers is a comma-separated list of GitHub login usernames to be ignored"
+    required: false
 runs:
   using: 'node16'
   main: 'index.js'

@@ -28,11 +28,12 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Notify PR Review
-        uses: naver/notify-pr-review@v1.2.1
+        uses: melong0124/notify-pr-review-user-replace@v1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           slackBotToken: ${{ secrets.SLACK_BOT_TOKEN }}
-          emailToSlackMap: 'user_1@example.com:slack_user_1;user_2@example.com:slack_user_2'
+          emailToSlackMap: "user@sample.com:replace_slack_user_name,user2@sample.com:replace_slack_user_name2"
+          ignoreUsers: "github_user_login1,github_user_login2"
 ```
 
 ## Inputs
@@ -49,12 +50,17 @@ e.g. `xoxb-798572638592-435243279588-9aCaWNnzVYelK9NzMMqa1yxz`
 
 ### `emailToSlackMap`
 
-**Optional** GitHub 이메일 주소를 특정 Slack 사용자 이름으로 매핑하는 값입니다. 값이 제공되지 않을 경우, 이메일 주소에서 @ 앞 부분이 Slack 사용자 이름으로 사용됩니다.
+**Required** GitHub 이메일 주소를 특정 Slack 사용자 이름으로 매핑하는 값입니다. 값이 제공되지 않을 경우, 이메일 주소에서 @ 앞 부분이 Slack 사용자 이름으로 사용됩니다.
 
-e.g. `user_1@example.com:slack_user_1;user_2@example.com:slack_user_2`
+### `user@sample.com:replace_slack_user_name,user2@sample.com:replace_slack_user_name2`
+
+**Required** ignoreUsers는 무시할 GitHub 로그인 사용자 이름의 쉼표로 구분된 목록입니다.
+
+e.g. `github_user_login1,github_user_login2`
 
 ## License
-```
+
+```text
 Copyright (c) 2023-present NAVER Corp.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,4 +74,22 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+---
+
+### Modifications
+This software is based on the original work by NAVER Corp., licensed under the Apache License 2.0.
+Additional features have been implemented in this version, including:
+
+- Ignore User List feature added
+- Email Replace feature added
+
+These modifications are distributed under the same Apache License 2.0.
+
+---
+
+### Notice
+This software includes modifications and enhancements that are not part of the original NAVER Corp. project. Any use of this software must comply with the Apache License 2.0.
+
+The names, trademarks, and logos of NAVER Corp. are not included in this license. Usage of NAVER Corp.'s branding in any form requires separate permission.
 ```
